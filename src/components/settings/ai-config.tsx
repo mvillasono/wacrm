@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import { Loader2, Sparkles, CheckCircle2, Trash2, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import { canEditSettings } from '@/lib/auth/roles';
+import { branding } from '@/lib/branding';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -245,7 +246,7 @@ export function AiConfig() {
     <div>
       <SettingsPanelHead
         title={t('title')}
-        description={t('description')}
+        description={t('description', { brandName: branding.name })}
       />
 
       {!canEdit && (

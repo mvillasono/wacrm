@@ -1,8 +1,15 @@
 import { getRequestConfig } from 'next-intl/server';
+import { cookies } from 'next/headers';
+import { isSupportedLocale, DEFAULT_LOCALE } from './locales';
 
 export default getRequestConfig(async () => {
-  // Read the locale from the environment, defaulting to 'en'
-  const locale = process.env.NEXT_PUBLIC_APP_LOCALE || 'en';
+  // Per-device choice (Settings → Appearance → Language) wins; falls
+  // back to the deployment-wide default set at build time, then 'en'.
+  const cookieStore = await cookies();
+  const cookieLocale = cookieStore.get('NEXT_LOCALE')?.value;
+  const locale = isSupportedLocale(cookieLocale)
+    ? cookieLocale
+    : process.env.NEXT_PUBLIC_APP_LOCALE || DEFAULT_LOCALE;
 
   let messages;
   try {

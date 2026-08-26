@@ -309,6 +309,45 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     window.location.href = "/login";
   }, []);
 
+  // Backstop for expired/revoked sessions. `onAuthStateChange` above is
+  // the primary signal, but it only fires reliably when the Supabase
+  // client itself attempts (and fails) a token refresh — it does not
+  // fire just because a query failed with an auth error, and pages like
+  // Settings run many concurrent queries against the same soon-to-be-
+  // rotated refresh token, which can leave the client in a state where
+  // `user` is stale but every request is silently unauthorized. Unlike
+  // `getSession()` (reads the locally cached token with no network
+  // call), `getUser()` re-validates against the Auth server, so this
+  // actually detects a dead session instead of trusting the cache.
+  // Runs on tab refocus (the common case — token died while the tab
+  // was in the background) and on a slow interval as a fallback.
+  useEffect(() => {
+    if (!user) return;
+    let cancelled = false;
+    const supabase = createClient();
+
+    const verifySession = async () => {
+      const { data, error } = await supabase.auth.getUser();
+      if (cancelled) return;
+      if (error || !data.user) {
+        console.warn("[AuthProvider] Session no longer valid — signing out");
+        await signOut();
+      }
+    };
+
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") verifySession();
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+    const interval = setInterval(verifySession, 5 * 60 * 1000);
+
+    return () => {
+      cancelled = true;
+      document.removeEventListener("visibilitychange", onVisibility);
+      clearInterval(interval);
+    };
+  }, [user, signOut]);
+
   const refreshProfile = useCallback(async () => {
     if (!user?.id) return;
     await fetchProfile(user.id);

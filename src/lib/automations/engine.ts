@@ -25,6 +25,11 @@ import { engineSendText, engineSendTemplate, engineSendInteractive } from './met
 import { validateInteractivePayload } from '@/lib/whatsapp/interactive'
 import { isDeliverableUrl } from '@/lib/webhooks/ssrf'
 
+// IANA timezone used to evaluate the "time_of_day" automation condition.
+// Change this if the deployment's business hours are anchored to a
+// different region than Peru (America/Lima, UTC-5, no DST).
+const BUSINESS_TIMEZONE = 'America/Lima'
+
 // ------------------------------------------------------------
 // Public API
 // ------------------------------------------------------------
@@ -726,8 +731,19 @@ async function evaluateCondition(cfg: ConditionStepConfig, args: ExecuteArgs): P
       // (supports over-midnight ranges like "18:00-09:00").
       const [from, to] = (cfg.operand ?? '').split('-')
       if (!from || !to) return false
-      const now = new Date()
-      const mins = now.getHours() * 60 + now.getMinutes()
+      // Evaluated in the deployment's business timezone, not the
+      // server's (Vercel runs functions in UTC) — otherwise a "9:00-
+      // 17:00" rule set by a Lima-based user would fire at 4:00-12:00
+      // local time instead.
+      const parts = new Intl.DateTimeFormat('en-US', {
+        timeZone: BUSINESS_TIMEZONE,
+        hourCycle: 'h23',
+        hour: '2-digit',
+        minute: '2-digit',
+      }).formatToParts(new Date())
+      const nowHour = Number(parts.find((p) => p.type === 'hour')?.value ?? 0)
+      const nowMinute = Number(parts.find((p) => p.type === 'minute')?.value ?? 0)
+      const mins = nowHour * 60 + nowMinute
       const parse = (s: string) => {
         const [h, m] = s.split(':').map(Number)
         return (h || 0) * 60 + (m || 0)

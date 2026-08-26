@@ -7,6 +7,7 @@ import {
   verifyPhoneNumber,
 } from '@/lib/whatsapp/meta-api'
 import { encrypt, decrypt } from '@/lib/whatsapp/encryption'
+import { branding } from '@/lib/branding'
 
 /**
  * Resolve the caller's account_id from their profile. Inlined here
@@ -229,7 +230,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           error:
-            'This WhatsApp phone number is already linked to another account on this instance. Each phone number can only be connected to one wacrm user.',
+            `This WhatsApp phone number is already linked to another account on this instance. Each phone number can only be connected to one ${branding.name} user.`,
         },
         { status: 409 }
       )

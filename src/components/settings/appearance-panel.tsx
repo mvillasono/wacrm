@@ -1,11 +1,13 @@
 "use client";
 
-import { Check, Moon, Palette, SunMoon, Sun } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Check, Globe, Moon, Palette, SunMoon, Sun } from "lucide-react";
 
 import { useTheme } from "@/hooks/use-theme";
 import { MODES, THEMES, type Mode, type ThemeId } from "@/lib/themes";
 import { cn } from "@/lib/utils";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { setLocaleCookie, SUPPORTED_LOCALES, type SupportedLocale } from "@/i18n/locales";
 import { SettingsPanelHead } from "./settings-panel-head";
 
 /**
@@ -23,6 +25,18 @@ import { SettingsPanelHead } from "./settings-panel-head";
 export function AppearancePanel() {
   const { theme, setTheme, mode, setMode } = useTheme();
   const t = useTranslations("Settings.appearance");
+  const router = useRouter();
+  const locale = useLocale() as SupportedLocale;
+
+  const setLocale = (code: SupportedLocale) => {
+    if (code === locale) return;
+    // Device-scoped (mirrors theme/mode's localStorage persistence) —
+    // read server-side in src/i18n/request.ts on every request. A
+    // cookie, not localStorage, because the locale has to be known
+    // before the server renders the page.
+    setLocaleCookie(code);
+    router.refresh();
+  };
 
   return (
     <section className="max-w-3xl animate-in fade-in-50 duration-200">
@@ -32,6 +46,29 @@ export function AppearancePanel() {
       />
 
       <div className="space-y-4">
+        <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground">
+          <Globe className="size-4 text-muted-foreground" />
+          {t("language")}
+        </h3>
+
+        <div
+          role="radiogroup"
+          aria-label="Language"
+          className="grid max-w-md grid-cols-2 gap-3"
+        >
+          {SUPPORTED_LOCALES.map(({ code, label }) => (
+            <LanguageCard
+              key={code}
+              code={code}
+              label={label}
+              isActive={code === locale}
+              onPick={() => setLocale(code)}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-8 space-y-4">
         <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground">
           <SunMoon className="size-4 text-muted-foreground" />
           {t("mode")}
@@ -74,6 +111,52 @@ export function AppearancePanel() {
         </div>
       </div>
     </section>
+  );
+}
+
+function LanguageCard({
+  code,
+  label,
+  isActive,
+  onPick,
+}: {
+  code: SupportedLocale;
+  label: string;
+  isActive: boolean;
+  onPick: () => void;
+}) {
+  const t = useTranslations("Settings.appearance");
+  return (
+    <button
+      type="button"
+      role="radio"
+      onClick={onPick}
+      aria-checked={isActive}
+      aria-label={t("useLanguage", { name: label })}
+      className={cn(
+        "flex items-center gap-3 rounded-lg border bg-card p-4 text-left transition-colors",
+        isActive
+          ? "border-primary/60 ring-2 ring-primary/40"
+          : "border-border hover:border-border hover:bg-muted/40",
+      )}
+    >
+      <span
+        aria-hidden
+        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-muted text-foreground"
+      >
+        <Globe className="h-4 w-4" />
+      </span>
+      <span className="flex-1 text-sm font-semibold text-foreground">
+        {label}
+      </span>
+      {isActive && (
+        <span className="inline-flex items-center gap-1 rounded-full bg-primary/15 px-2 py-0.5 text-[11px] font-medium text-primary">
+          <Check className="h-3 w-3" />
+          {t("active")}
+        </span>
+      )}
+      <span className="sr-only">{code}</span>
+    </button>
   );
 }
 

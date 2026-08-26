@@ -29,6 +29,7 @@ import {
   PanelRightClose,
 } from "lucide-react";
 import { format, isToday, isYesterday, differenceInHours } from "date-fns";
+import { es } from "date-fns/locale";
 import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -115,7 +116,7 @@ function formatDateSeparator(dateStr: string, t: ReturnType<typeof useTranslatio
   const date = new Date(dateStr);
   if (isToday(date)) return t("today");
   if (isYesterday(date)) return t("yesterday");
-  return format(date, "MMMM d, yyyy");
+  return format(date, "MMMM d, yyyy", { locale: es });
 }
 
 function groupMessagesByDate(messages: Message[]) {

@@ -17,6 +17,7 @@ import {
 import { createClient } from '@/lib/supabase/client';
 import { useAuth } from '@/hooks/use-auth';
 import { useTranslations } from 'next-intl';
+import { branding } from '@/lib/branding';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -477,7 +478,7 @@ export function WhatsAppConfig() {
                   }
                 >
                   {isRegistered
-                    ? t('registered')
+                    ? t('registered', { brandName: branding.name })
                     : t('notRegistered')}
                 </AlertTitle>
               </div>
@@ -647,7 +648,7 @@ export function WhatsAppConfig() {
                 className="bg-muted border-border text-foreground placeholder:text-muted-foreground tracking-widest"
               />
               <p className="text-xs text-muted-foreground leading-relaxed">
-                <span dangerouslySetInnerHTML={{ __html: t('pinHint') }} />
+                <span dangerouslySetInnerHTML={{ __html: t('pinHint', { brandName: branding.name }) }} />
               </p>
             </div>
           </CardContent>

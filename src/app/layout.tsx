@@ -6,6 +6,7 @@ import Script from "next/script";
 import "./globals.css";
 import { ThemeProvider } from "@/hooks/use-theme";
 import { ThemedToaster } from "@/components/themed-toaster";
+import { branding } from "@/lib/branding";
 import {
   DEFAULT_MODE,
   DEFAULT_THEME,
@@ -22,10 +23,10 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "wacrm",
-    template: "%s — wacrm",
+    default: branding.name,
+    template: `%s — ${branding.name}`,
   },
-  description: "Self-hostable CRM template for WhatsApp.",
+  description: branding.description,
   robots: {
     index: false,
     follow: false,

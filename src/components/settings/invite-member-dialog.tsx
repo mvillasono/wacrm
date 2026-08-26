@@ -28,6 +28,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { branding } from '@/lib/branding';
 import { Label } from '@/components/ui/label';
 import {
   Select,
@@ -165,7 +166,7 @@ export function InviteMemberDialog({
     // for users in multi-team contexts where "our wacrm account"
     // wouldn't be enough to disambiguate.
     const accountName = result?.accountName ?? 'our wacrm account';
-    const message = t('whatsappMessage', { accountName, expiresInDays: result?.expiresInDays ?? 0, url });
+    const message = t('whatsappMessage', { accountName, expiresInDays: result?.expiresInDays ?? 0, url, brandName: branding.name });
     return `https://wa.me/?text=${encodeURIComponent(message)}`;
   }
 

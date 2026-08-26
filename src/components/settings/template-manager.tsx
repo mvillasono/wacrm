@@ -14,6 +14,7 @@ import {
   Upload,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
+import { branding } from '@/lib/branding';
 import {
   uploadAccountMedia,
   MEDIA_MAX_BYTES_BY_KIND,
@@ -1095,8 +1096,8 @@ export function TemplateManager() {
             <DialogTitle className="text-popover-foreground">{t('deleteDialogTitle')}</DialogTitle>
             <DialogDescription className="text-muted-foreground">
               {templateToDelete?.meta_template_id
-                ? t('deleteMetaDesc', { name: templateToDelete.name })
-                : t('deleteLocalDesc', { name: templateToDelete?.name || '' })}
+                ? t('deleteMetaDesc', { name: templateToDelete.name, brandName: branding.name })
+                : t('deleteLocalDesc', { name: templateToDelete?.name || '', brandName: branding.name })}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="bg-popover border-border">
