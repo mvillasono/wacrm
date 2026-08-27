@@ -21,14 +21,19 @@ export const metadata: Metadata = {
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background px-4 py-12">
-      {/* Ambient brand glow — derives from --primary so it repaints correctly
-          across every accent theme and light/dark mode, no hardcoded hue. */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-40 left-1/2 h-[560px] w-[560px] -translate-x-1/2 rounded-full bg-primary/20 blur-[120px] dark:bg-primary/25"
-      />
-      <div className="relative z-10 flex w-full justify-center">{children}</div>
+    <div className="flex min-h-screen flex-col items-center justify-center gap-6 bg-background px-4 py-12">
+      {children}
+      <footer className="text-center text-xs text-muted-foreground">
+        Creado por{" "}
+        <a
+          href="https://ytupacuando.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-medium text-foreground transition-colors hover:text-primary"
+        >
+          YTuPaCuando
+        </a>
+      </footer>
     </div>
   );
 }
