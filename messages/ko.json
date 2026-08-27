@@ -79,6 +79,19 @@
       "newBroadcast": "새 브로드캐스트",
       "newAutomation": "새 자동화"
     },
+    "gettingStarted": {
+      "title": "시작하기",
+      "dismiss": "숨기기",
+      "whatsappTitle": "왓츠앱 비즈니스 연결",
+      "whatsappDone": "연결됨 — 메시지를 수신하고 있습니다",
+      "whatsappPending": "아직 메시지를 수신하지 않습니다",
+      "whatsappCta": "설정",
+      "aiTitle": "AI 어시스턴트 설정",
+      "aiOptional": "선택",
+      "aiDone": "설정됨",
+      "aiPending": "아직 설정하지 않음",
+      "aiCta": "설정"
+    },
     "activityFeed": {
       "title": "최근 활동",
       "viewAll": "전체 보기 →",

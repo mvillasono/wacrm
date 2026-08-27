@@ -79,6 +79,19 @@
       "newBroadcast": "New Broadcast",
       "newAutomation": "New Automation"
     },
+    "gettingStarted": {
+      "title": "Getting started",
+      "dismiss": "Dismiss",
+      "whatsappTitle": "Connect your WhatsApp Business",
+      "whatsappDone": "Connected and receiving messages",
+      "whatsappPending": "Not receiving messages yet",
+      "whatsappCta": "Set up",
+      "aiTitle": "Set up your AI assistant",
+      "aiOptional": "Optional",
+      "aiDone": "Configured",
+      "aiPending": "Not configured yet",
+      "aiCta": "Set up"
+    },
     "activityFeed": {
       "title": "Recent Activity",
       "viewAll": "View all →",

@@ -79,6 +79,19 @@
       "newBroadcast": "Nueva difusión",
       "newAutomation": "Nueva automatización"
     },
+    "gettingStarted": {
+      "title": "Primeros pasos",
+      "dismiss": "Ocultar",
+      "whatsappTitle": "Conecta tu WhatsApp Business",
+      "whatsappDone": "Conectado y recibiendo mensajes",
+      "whatsappPending": "Todavía no está recibiendo mensajes",
+      "whatsappCta": "Configurar",
+      "aiTitle": "Configura tu asistente de IA",
+      "aiOptional": "Opcional",
+      "aiDone": "Configurado",
+      "aiPending": "Todavía no configurado",
+      "aiCta": "Configurar"
+    },
     "activityFeed": {
       "title": "Actividad reciente",
       "viewAll": "Ver todo →",
