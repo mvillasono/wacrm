@@ -33,7 +33,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
       <div className="relative z-10 flex w-full flex-col items-center gap-6">
         {children}
         <footer className="text-center text-xs text-muted-foreground">
-          Creado por{" "}
+          Powered by{" "}
           <a
             href="https://ytupacuando.com"
             target="_blank"
