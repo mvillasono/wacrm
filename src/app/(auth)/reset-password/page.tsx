@@ -4,16 +4,10 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { AuthCard } from "@/components/auth/auth-card";
+import { PasswordInput } from "@/components/auth/password-input";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { MessageSquare, CheckCircle } from "lucide-react";
 
 export default function ResetPasswordPage() {
@@ -54,100 +48,76 @@ export default function ResetPasswordPage() {
 
   if (success) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background px-4">
-        <Card className="w-full max-w-md border-border bg-card">
-          <CardHeader className="items-center text-center">
-            <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
-              <CheckCircle className="h-6 w-6 text-primary" />
-            </div>
-            <CardTitle className="text-xl text-foreground">
-              Password updated
-            </CardTitle>
-            <CardDescription className="text-muted-foreground">
-              Your password was changed successfully.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button
-              className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
-              onClick={() => router.push("/dashboard")}
-            >
-              Go to dashboard
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
+      <AuthCard
+        icon={<CheckCircle className="h-6 w-6" />}
+        title="Password updated"
+        description="Your password was changed successfully."
+      >
+        <Button
+          className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+          onClick={() => router.push("/dashboard")}
+        >
+          Go to dashboard
+        </Button>
+      </AuthCard>
     );
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <Card className="w-full max-w-md border-border bg-card">
-        <CardHeader className="items-center text-center">
-          <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
-            <MessageSquare className="h-6 w-6 text-primary" />
+    <AuthCard
+      icon={<MessageSquare className="h-6 w-6" />}
+      title="Set a new password"
+      description="Choose a new password for your account"
+    >
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        {error && (
+          <div className="rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+            {error}
           </div>
-          <CardTitle className="text-xl text-foreground">
-            Set a new password
-          </CardTitle>
-          <CardDescription className="text-muted-foreground">
-            Choose a new password for your account
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            {error && (
-              <div className="rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
-                {error}
-              </div>
-            )}
+        )}
 
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="password" className="text-muted-foreground">
-                New password
-              </Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="At least 6 characters"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="border-border bg-muted text-foreground placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-primary/20"
-              />
-            </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="password" className="text-muted-foreground">
+            New password
+          </Label>
+          <PasswordInput
+            id="password"
+            placeholder="At least 6 characters"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="border-border bg-muted text-foreground placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-primary/20"
+          />
+        </div>
 
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="confirmPassword" className="text-muted-foreground">
-                Confirm new password
-              </Label>
-              <Input
-                id="confirmPassword"
-                type="password"
-                placeholder="Repeat your new password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-                className="border-border bg-muted text-foreground placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-primary/20"
-              />
-            </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="confirmPassword" className="text-muted-foreground">
+            Confirm new password
+          </Label>
+          <PasswordInput
+            id="confirmPassword"
+            placeholder="Repeat your new password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+            className="border-border bg-muted text-foreground placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-primary/20"
+          />
+        </div>
 
-            <Button
-              type="submit"
-              disabled={loading}
-              className="mt-2 h-10 w-full bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
-            >
-              {loading ? "Updating..." : "Update password"}
-            </Button>
-          </form>
+        <Button
+          type="submit"
+          disabled={loading}
+          className="mt-2 h-10 w-full bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
+        >
+          {loading ? "Updating..." : "Update password"}
+        </Button>
+      </form>
 
-          <p className="mt-6 text-center text-sm text-muted-foreground">
-            <Link href="/login" className="text-primary hover:text-primary/80">
-              Back to sign in
-            </Link>
-          </p>
-        </CardContent>
-      </Card>
-    </div>
+      <p className="mt-6 text-center text-sm text-muted-foreground">
+        <Link href="/login" className="text-primary hover:text-primary/80">
+          Back to sign in
+        </Link>
+      </p>
+    </AuthCard>
   );
 }
