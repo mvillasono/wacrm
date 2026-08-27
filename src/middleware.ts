@@ -77,9 +77,12 @@ export async function middleware(request: NextRequest) {
     return withRefreshedCookies(NextResponse.redirect(url))
   }
 
-  // API routes that need auth (not webhooks)
+  // API routes that need auth (not webhooks, and not /health — that one
+  // authenticates externally via x-cron-secret since its whole point is
+  // being pollable without a user session, see its route for why)
   if (!user && request.nextUrl.pathname.startsWith('/api/whatsapp/') &&
-      !request.nextUrl.pathname.includes('/webhook')) {
+      !request.nextUrl.pathname.includes('/webhook') &&
+      request.nextUrl.pathname !== '/api/whatsapp/health') {
     return withRefreshedCookies(
       NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     )
