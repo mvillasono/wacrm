@@ -87,17 +87,30 @@ export async function GET() {
   const checks: {
     config_exists: boolean
     token_decryptable: boolean
+    webhook_secret_configured: boolean
     phone_metadata_ok: boolean
     waba_subscribed_to_app: boolean | null
     locally_marked_registered: boolean
   } = {
     config_exists: true,
     token_decryptable: true,
+    // The other checks below all hit Meta's Graph API and can look
+    // perfectly "live" while every inbound webhook silently 403s,
+    // because signature verification (webhook-signature.ts) fails
+    // closed on a missing secret — Meta never sees that, it only
+    // sees "delivery attempted." This caught exactly that incident.
+    webhook_secret_configured: Boolean(process.env.META_APP_SECRET),
     phone_metadata_ok: false,
     waba_subscribed_to_app: null,
     locally_marked_registered: config.registered_at != null,
   }
   const errors: string[] = []
+
+  if (!checks.webhook_secret_configured) {
+    errors.push(
+      'META_APP_SECRET is not set on this server — every inbound webhook from Meta is being rejected, even though the rest of this connection looks fine. Set the env var and redeploy.',
+    )
+  }
 
   // 1. Phone metadata
   try {
@@ -141,6 +154,7 @@ export async function GET() {
   }
 
   const live =
+    checks.webhook_secret_configured &&
     checks.phone_metadata_ok &&
     (checks.waba_subscribed_to_app ?? false) &&
     checks.locally_marked_registered
