@@ -60,6 +60,13 @@
   "ModeToggle": {
     "switchMode": "Cambiar a modo {mode}"
   },
+  "AccountAccess": {
+    "unlinkedTitle": "Este usuario no está vinculado a ninguna cuenta",
+    "unlinkedBody": "Nada de lo que cambies se guardará mientras esto no se resuelva — la base de datos rechaza cualquier escritura de un usuario sin cuenta o rol. Si te invitaron a un equipo, pídele al dueño que reenvíe la invitación. En una instalación autoalojada, verifica que la migración de creación de cuenta se haya ejecutado para este usuario.",
+    "errorTitle": "No se pudieron cargar tus permisos",
+    "errorBody": "Tu rol de cuenta no se cargó, así que cada acción se trata como solo lectura y los cambios no se guardarán. Revisa tu conexión e intenta de nuevo.",
+    "retry": "Reintentar"
+  },
   "Dashboard": {
     "page": {
       "title": "Panel",
@@ -229,7 +236,25 @@
       "interactiveReply": "[Respuesta interactiva]",
       "unsupported": "[Tipo de mensaje no compatible]",
       "aiBadge": "IA",
-      "aiBadgeTitle": "Enviado automáticamente por el asistente de IA"
+      "aiBadgeTitle": "Enviado automáticamente por el asistente de IA",
+      "download": "Descargar",
+      "downloadFailed": "No se pudo descargar el adjunto",
+      "viewImage": "Ver imagen",
+      "expandVideo": "Expandir video",
+      "imageAlt": "Imagen compartida"
+    },
+    "mediaViewer": {
+      "counter": "{index} de {total}",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "zoomIn": "Ampliar a tamaño completo",
+      "zoomOut": "Ajustar a la pantalla",
+      "openOriginal": "Abrir original",
+      "download": "Descargar",
+      "downloadFailed": "No se pudo descargar el adjunto",
+      "failed": "Este adjunto ya no está disponible",
+      "imageAlt": "Imagen compartida",
+      "you": "Tú"
     },
     "actions": {
       "reply": "Responder",
@@ -372,9 +397,9 @@
         "custom": "Campos personalizados",
         "deals": "Negocios",
         "tags": "Etiquetas",
-      "noTags": "Sin etiquetas",
-      "noDeals": "Sin negocios",
-      "addNotePlaceholder": "Agregar una nota..."
+        "noTags": "Sin etiquetas",
+        "noDeals": "Sin negocios",
+        "addNotePlaceholder": "Agregar una nota..."
       },
       "actions": {
         "edit": "Editar",
@@ -669,7 +694,16 @@
         "failed": "Fallidos"
       },
       "toastFailedDelete": "No se pudo eliminar: {error}",
-      "toastDeleted": "Difusión eliminada"
+      "toastDeleted": "Difusión eliminada",
+      "resumeTitle": "Algunos destinatarios necesitan otro intento",
+      "resumeStalledTitle": "Esta campaña se detuvo a medio camino",
+      "resumeHint": "{count} destinatarios fallaron. Reintentar los envía de nuevo desde el servidor.",
+      "resumeStalledHint": "{count} destinatarios nunca recibieron el envío — la pestaña del navegador que ejecutaba esta campaña se cerró antes de terminar. Reanudar la completa desde el servidor.",
+      "resumePending": "Reanudar envío ({count})",
+      "retryFailed": "Reintentar fallidos ({count})",
+      "toastResumeStarted": "Enviando a {count} destinatarios en segundo plano.",
+      "toastResumeStartedCapped": "Enviando a {count} destinatarios en segundo plano. {remaining} más necesitarán otra ejecución.",
+      "toastResumeFailed": "No se pudo reanudar: {error}"
     },
     "new": {
       "title": "Nueva difusión",
@@ -946,6 +980,7 @@
         "no": "No"
       },
       "addStep": "Agregar paso",
+      "delete": "Eliminar",
       "config": {
         "messageText": "Texto del mensaje",
         "placeholderMessageText": "¡Hola! Gracias por escribirnos…",
@@ -985,6 +1020,8 @@
         "placeholderBody": "{\"id\": \"{{ contact.id }}\"}",
         "matchType": "Tipo de coincidencia",
         "matchContains": "Contiene",
+        "matchWord": "Palabra completa",
+        "matchWordHint": "Coincide con la palabra clave solo como palabra independiente, así \"k\" ya no se activa con \"gracias\". Ideal para palabras clave cortas en idiomas separados por espacios; usa Contiene para idiomas escritos sin espacios.",
         "matchExact": "Exacta",
         "closeConversationHint": "Cambia el estado de la conversación a \"cerrada\". No requiere configuración."
       }
@@ -1470,6 +1507,12 @@
       "webhookTitle": "Configuración del webhook",
       "webhookDesc": "Usa esta URL como callback del webhook en el panel de tu app de Meta.",
       "webhookUrl": "URL de callback del webhook",
+      "mediaTitle": "Almacenamiento de adjuntos",
+      "mediaDesc": "Meta elimina el contenido multimedia recibido unos 30 días después de que llega. Los adjuntos se pueden copiar a tu propio almacenamiento para que sigan siendo visibles.",
+      "mirrorInbound": "Conservar adjuntos entrantes",
+      "mirrorInboundDesc": "Guarda una copia de cada foto, video, nota de voz y documento que envíen los clientes. Usa tu almacenamiento de Supabase; los archivos de más de 16 MB se omiten.",
+      "mirrorInboundOffWarning": "Los adjuntos nuevos dejarán de copiarse y quedarán no disponibles unos 30 días después de llegar.",
+      "mirrorInboundSaveFailed": "No se pudo actualizar la configuración de adjuntos.",
       "saving": "Guardando...",
       "saveConfig": "Guardar configuración",
       "testing": "Probando...",
@@ -1636,6 +1679,7 @@
       "description": "Usa tu propia clave de OpenAI o Anthropic. {brandName} llama al proveedor directamente con tu clave — sin cargos de IA por usuario, y tus datos siguen siendo tuyos. Esto impulsa las respuestas redactadas por IA en la bandeja de entrada, el bot de auto-respuesta y el Playground.",
       "adminOnlyConfig": "Solo administradores y propietarios pueden cambiar la configuración de IA.",
       "loadFailed": "No se pudo cargar la configuración de IA",
+      "loading": "Cargando…",
       "providerAndKey": "Proveedor y clave",
       "encryptionNotice": "Tu clave se almacena encriptada (AES-256-GCM) y no se vuelve a mostrar después de guardarla.",
       "provider": "Proveedor",
@@ -1698,5 +1742,54 @@
       "reindexTooltip": "Regenerar embeddings de todos los documentos (p. ej. después de agregar una clave de embeddings)",
       "loading": "Cargando…"
     }
+  },
+  "Agents": {
+    "title": "Agentes de IA",
+    "subtitle": "Tu agente de IA con tu propia clave — configúralo y luego pruébalo en el playground antes de que responda a tus clientes en la bandeja de entrada.",
+    "tabs": {
+      "playground": "Playground",
+      "setup": "Configuración",
+      "usage": "Uso"
+    },
+    "playground": {
+      "subtitle": "— prueba respuestas como si fueras un cliente",
+      "reset": "Reiniciar",
+      "emptyHint": "Envía un mensaje para ver cómo respondería tu agente.",
+      "emptyHintDetail": "Usa tu base de conocimiento y se comporta exactamente igual que el bot de respuesta automática — incluyendo la transferencia a un humano.",
+      "goToSetup": "¿Todavía no lo configuras? Ir a Configuración",
+      "handoffNote": "Aquí transferiría la conversación a un humano",
+      "thinking": "Pensando…",
+      "inputPlaceholder": "Escribe un mensaje de cliente…",
+      "toastNotConfigured": "Todavía no hay un agente configurado — termina la Configuración primero.",
+      "toastNoReply": "No se pudo obtener una respuesta.",
+      "toastUnreachable": "No se pudo contactar al agente."
+    },
+    "usage": {
+      "title": "Uso de tokens",
+      "description": "Tokens gastados en tu clave de proveedor por los borradores y el bot de respuesta automática. Solo se cuentan cantidades — el contenido de los mensajes no se guarda aquí.",
+      "windowOption": "Últimos {days} días",
+      "loadFailed": "No se pudo cargar el uso",
+      "emptyTitle": "Todavía no hay uso de IA en los últimos {days} días.",
+      "emptyDetail": "Esto se va llenando a medida que el asistente redacta borradores y responde automáticamente.",
+      "statTotalTokens": "Tokens totales",
+      "statLlmCalls": "Llamadas al modelo",
+      "statAutoReply": "Respuesta automática",
+      "statDrafts": "Borradores",
+      "tokensPerDay": "Tokens por día",
+      "byModel": "Por modelo",
+      "callsCount": "{count, plural, one {# llamada} other {# llamadas}}",
+      "truncatedNotice": "Mostrando una ventana parcial — el uso es lo bastante alto como para que solo se resuman aquí los registros más recientes."
+    }
+  },
+  "Notifications": {
+    "title": "Notificaciones",
+    "subtitle": "Aquí aparecen las conversaciones que otros miembros del equipo te asignan.",
+    "markAllRead": "Marcar todo como leído",
+    "toastMarkFailed": "No se pudo marcar la notificación como leída",
+    "toastMarkAllFailed": "No se pudo marcar todo como leído",
+    "retry": "Reintentar",
+    "emptyTitle": "Todavía no hay notificaciones",
+    "emptyDetail": "Aquí verás una alerta cuando alguien te asigne una conversación.",
+    "unread": "No leída"
   }
 }
