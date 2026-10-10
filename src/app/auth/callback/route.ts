@@ -9,7 +9,23 @@ import { createClient } from "@/lib/supabase/server";
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
+  const tokenHash = searchParams.get("token_hash");
+  const type = searchParams.get("type");
   const next = searchParams.get("next") ?? "/dashboard";
+
+  // One-time login links minted by the admin API
+  // (`/api/admin/v1/accounts/{id}/login-link`) carry a token hash
+  // instead of a PKCE code.
+  if (tokenHash && type === "magiclink") {
+    const supabase = await createClient();
+    const { error } = await supabase.auth.verifyOtp({
+      type: "magiclink",
+      token_hash: tokenHash,
+    });
+    if (!error) {
+      return NextResponse.redirect(`${origin}${next}`);
+    }
+  }
 
   if (code) {
     const supabase = await createClient();
