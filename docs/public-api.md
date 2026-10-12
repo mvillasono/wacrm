@@ -205,6 +205,9 @@ contact in another account returns `404`.
 List conversations, newest first. Scope: `conversations:read`.
 Paginated. Optional filters: `?status=` (`open` / `pending` / `closed`)
 and `?contact_id=`. Each conversation embeds its contact + tags.
+`?sort=recent` orders by last activity (`last_message_at`, like the
+inbox) and returns only the first `limit` rows — `next_cursor` is
+always `null` in that mode.
 
 ### `GET /api/v1/conversations/{id}`
 
@@ -216,8 +219,14 @@ to another account.
 List a conversation's messages, newest first. Scope: `messages:read`.
 Paginated. Each message includes its `direction` (`inbound` /
 `outbound`), `status` (delivery state), `whatsapp_message_id`, and
-`content_*`. The conversation is verified to belong to your account
-first (`404` otherwise).
+`content_*` / `media_url` / `media_type`. The conversation is verified
+to belong to your account first (`404` otherwise).
+
+### `POST /api/v1/conversations/{id}/read`
+
+Mark a conversation as read (`unread_count` → `0`), as opening it in
+the inbox does. Scope: `messages:send`. `404` if it belongs to another
+account.
 
 ### `POST /api/v1/broadcasts`
 

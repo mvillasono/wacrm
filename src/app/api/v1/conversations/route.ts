@@ -4,6 +4,11 @@
 // Keyset-paginated (newest first). Filters: `?status=` (open/pending/
 // closed) and `?contact_id=`. Each conversation embeds its contact +
 // tags via the shared CONVERSATION_SELECT.
+//
+// `?sort=recent` orders by last activity (`last_message_at` desc) like
+// the inbox does. That ordering moves under the client as messages
+// arrive, so it isn't keyset-paginated: it returns the first `limit`
+// conversations and `next_cursor` is always null.
 // ============================================================
 
 import { requireApiKey } from '@/lib/auth/api-context';
@@ -27,6 +32,7 @@ export async function GET(request: Request) {
     const url = new URL(request.url);
     const status = url.searchParams.get('status');
     const contactId = url.searchParams.get('contact_id');
+    const recent = url.searchParams.get('sort') === 'recent';
 
     let query = ctx.supabase
       .from('conversations')
@@ -35,6 +41,23 @@ export async function GET(request: Request) {
 
     if (status) query = query.eq('status', status);
     if (contactId) query = query.eq('contact_id', contactId);
+
+    if (recent) {
+      const { data, error } = await query
+        .order('last_message_at', { ascending: false, nullsFirst: false })
+        .order('id', { ascending: false })
+        .limit(limit);
+      if (error) {
+        console.error('[api/v1/conversations] list error:', error);
+        return fail('internal', 'Failed to list conversations', 500);
+      }
+      return okList(
+        (data ?? []).map((r) =>
+          serializeConversation(normalizeConversation(r as Conversation))
+        ),
+        null
+      );
+    }
 
     query = query
       .order('created_at', { ascending: false })
